@@ -1,75 +1,47 @@
-'use client';
-
-import { useEffect, useRef, useState } from 'react';
+import { ArrowRight } from 'lucide-react';
 
 export default function CTASection() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
-
   return (
-    <section ref={sectionRef} className="py-32 px-6 relative overflow-hidden">
-      <div className="absolute inset-0 cta-texture-grid" aria-hidden="true" style={{
-        maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 100%)',
-        WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 100%)'
-      }}></div>
+    <section className="py-28 md:py-40 border-t border-border relative overflow-hidden">
+      {/* Decorative oversized text */}
+      <div
+        className="absolute bottom-0 left-0 text-[8rem] md:text-[14rem] font-bold leading-none text-border/20 select-none pointer-events-none -z-10 hidden md:block"
+        aria-hidden="true"
+      >
+        GO
+      </div>
 
-      <div className="max-w-4xl mx-auto text-center relative z-10">
-        <div
-          className={`transition-all duration-700 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
-        >
-          {/* Heading */}
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6">
-            Ready to get paid <span className="text-primary">fast</span><span className="text-3xl md:text-4xl">.ai?</span>
-          </h2>
+      <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-16 text-center">
+        <p className="font-mono text-xs uppercase tracking-widest text-accent mb-6">
+          Ready?
+        </p>
 
-          {/* Subheading */}
-          <p className="text-xl text-text-muted mb-10 max-w-2xl mx-auto">
-            Stop chasing payments manually. Let AI handle your collections while you focus on growing your business.
-          </p>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tighter leading-none mb-6">
+          Stop chasing.
+          <br />
+          <span className="text-accent">Start collecting.</span>
+        </h2>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <a
-              href="https://dashboard.getpaidfast.ai/register"
-              className="inline-block px-10 py-4 bg-white text-background rounded-full font-bold text-lg hover:bg-text transition-colors shadow-2xl"
-            >
-              Use For Free
-            </a>
-            <a
-              href="#pricing"
-              className="inline-block px-10 py-4 bg-background text-white rounded-full font-semibold text-lg border-2 border-white/20 hover:border-white/40 transition-colors"
-            >
-              View Pricing
-            </a>
-          </div>
+        <p className="text-muted-foreground max-w-lg mx-auto mb-10 text-base md:text-lg">
+          Connect your Xero account and let AI handle the calls.
+          Free to start, takes 30 seconds to set up.
+        </p>
 
-          {/* Trust Badge */}
-          <p className="text-text-muted text-sm mt-8">
-            No credit card required • 15 free calls/month • Completely free
-          </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <a
+            href="https://dashboard.getpaidfast.ai/register"
+            className="inline-flex items-center gap-2 px-8 py-4 border-2 border-accent text-accent font-semibold uppercase tracking-wider text-sm hover:bg-accent hover:text-accent-foreground transition-colors duration-150 active:translate-y-px"
+          >
+            Get Started Free
+            <ArrowRight size={16} strokeWidth={1.5} />
+          </a>
+          <a
+            href="#demo"
+            className="group relative inline-flex items-center gap-2 text-muted-foreground font-semibold uppercase tracking-wider text-sm hover:text-foreground transition-colors duration-150"
+          >
+            Hear a Sample Call
+            <span className="absolute left-0 -bottom-1 h-px w-full bg-foreground origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-150" />
+          </a>
         </div>
       </div>
     </section>

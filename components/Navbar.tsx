@@ -1,70 +1,79 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
+
+const navLinks = [
+  { label: 'How It Works', href: '#how-it-works' },
+  { label: 'Features', href: '#features' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'FAQ', href: '#faq' },
+];
 
 export default function Navbar() {
-  const [ctaHighlighted, setCtaHighlighted] = useState(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  useEffect(() => {
-    const howItWorksSection = document.querySelector('#how-it-works');
-
-    if (!howItWorksSection) return;
-
-    observerRef.current = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
-          setCtaHighlighted(true);
-        } else if (entry.isIntersecting) {
-          setCtaHighlighted(false);
-        }
-      },
-      {
-        threshold: 0,
-        rootMargin: '-80px 0px 0px 0px'
-      }
-    );
-
-    observerRef.current.observe(howItWorksSection);
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
+  const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/80 rounded-b-2xl px-6 py-4">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center">
-            <span className="text-xl font-bold">
-              getpaid<span className="text-primary">fast</span>.ai
-            </span>
-          </Link>
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
+      <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-16">
+        {/* Logo */}
+        <a href="#" className="text-foreground font-semibold text-lg tracking-tight">
+          getpaidfast<span className="text-accent">.</span>
+        </a>
 
-          <div className="flex items-center gap-4">
+        {/* Desktop nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
             <a
-              href="https://dashboard.getpaidfast.ai/login"
-              className="text-text-muted hover:text-secondary transition-colors font-medium"
+              key={link.href}
+              href={link.href}
+              className="relative text-sm font-medium text-muted-foreground hover:text-foreground tracking-wide uppercase transition-colors duration-150 group"
             >
-              Login
+              {link.label}
+              <span className="absolute left-0 -bottom-1 h-px w-full bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-150" />
             </a>
-            <a
-              href="https://dashboard.getpaidfast.ai/register"
-              className={`px-6 py-2.5 rounded-lg font-medium transition-all duration-500 ${
-                ctaHighlighted
-                  ? 'bg-secondary text-white'
-                  : 'bg-text text-background hover:bg-secondary'
-              }`}
-            >
-              Use For Free
-            </a>
-          </div>
+          ))}
+          <a
+            href="https://dashboard.getpaidfast.ai/register"
+            className="relative inline-flex items-center text-sm font-semibold text-accent uppercase tracking-wider group"
+          >
+            Get Started
+            <span className="absolute left-0 -bottom-1 h-0.5 w-full bg-accent scale-x-100 group-hover:scale-x-110 transition-transform duration-150 origin-left" />
+          </a>
         </div>
+
+        {/* Mobile toggle */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="md:hidden text-foreground p-2"
+          aria-label="Toggle menu"
+        >
+          {open ? <X size={20} strokeWidth={1.5} /> : <Menu size={20} strokeWidth={1.5} />}
+        </button>
       </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="md:hidden border-t border-border bg-background px-6 py-6 space-y-4">
+          {navLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={() => setOpen(false)}
+              className="block text-sm font-medium text-muted-foreground hover:text-foreground uppercase tracking-wider transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="https://dashboard.getpaidfast.ai/register"
+            onClick={() => setOpen(false)}
+            className="block text-sm font-semibold text-accent uppercase tracking-wider pt-2 border-t border-border"
+          >
+            Get Started
+          </a>
+        </div>
+      )}
     </nav>
   );
 }

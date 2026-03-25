@@ -1,202 +1,87 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { Plus, Minus } from 'lucide-react';
+
+const faqs = [
+  {
+    question: 'How does the AI know about my business?',
+    answer:
+      'When you connect your account, the AI reads your website to learn what your business does, how you work, and who your clients are. This means it can have context-aware conversations that represent your business accurately.',
+  },
+  {
+    question: 'Will the AI sound natural on the call?',
+    answer:
+      'Yes. We use Ultravox, a state-of-the-art voice AI engine that produces natural, human-sounding speech. It\'s not a robocall — it\'s a professional conversation. You can listen to a sample call on this page.',
+  },
+  {
+    question: 'What if a client gets upset?',
+    answer:
+      'The AI is polite and professional by default. You can customize the tone from a gentle nudge to a firmer reminder. The AI will never be rude, threatening, or aggressive. It represents your business the way you want.',
+  },
+  {
+    question: 'How does the Xero integration work?',
+    answer:
+      'You connect your Xero account with one click via OAuth. getpaidfast then imports your invoices, client names, and contact details automatically. When an invoice is overdue, you can trigger an AI call right from the dashboard.',
+  },
+  {
+    question: 'Can I see what the AI said on each call?',
+    answer:
+      'Absolutely. Every call has a full transcript, recording, and outcome summary in your dashboard. You have complete visibility into every interaction.',
+  },
+  {
+    question: 'How much does it cost per call?',
+    answer:
+      'We have three plans: Free (15 calls/month), Pro at $70/mo (150 calls/month), and Enterprise at $215/mo (500 calls/month). Start free — no credit card required.',
+  },
+];
 
 export default function FAQSection() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
-
-  const faqs = [
-    {
-      question: "What if the AI can't handle a complex situation?",
-      answer: "You get notified instantly with a full call summary. The AI handles 95% of calls successfully - for edge cases, you step in with all the context you need."
-    },
-    {
-      question: "How long does setup take?",
-      answer: "Under 60 seconds. Click 'Connect Xero' → Authorize → AI starts calling. That's it."
-    },
-    {
-      question: "Can I customize what the AI says?",
-      answer: "Completely. Change the voice, script, tone, and messaging to match your brand. Make it sound exactly how you want."
-    },
-    {
-      question: "What happens if someone promises to pay but doesn't?",
-      answer: "AI automatically follows up based on your schedule. If they still don't pay, you get a detailed history of every conversation to take further action."
-    },
-    {
-      question: "How does the AI sound? Will clients think it's a robot?",
-      answer: "Professional and conversational. Clients know it's AI - we're completely transparent - but they're impressed by how natural it sounds."
-    },
-    {
-      question: "Will my clients hate me for using a robot?",
-      answer: "Quite the opposite. Your clients will appreciate the consistency and professionalism. Plus, the AI never has a bad day, forgets to follow up, or gets awkward about money. It's like having the world's most polite, patient collections specialist who never needs coffee breaks."
-    }
-  ];
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section ref={sectionRef} className="py-32 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Left Side - FAQ */}
-          <div
-            className={`transition-all duration-700 ${
-              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
-            }`}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-text-muted mb-6">
-              Everything you need to know about getpaidfast.ai
+    <section id="faq" className="py-20 md:py-28 lg:py-32 bg-muted border-t border-border">
+      <div className="max-w-5xl mx-auto px-6 md:px-12 lg:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-12 lg:gap-16">
+          {/* Left — heading */}
+          <div>
+            <p className="font-mono text-xs uppercase tracking-widest text-accent mb-4">
+              FAQ
             </p>
-
-            <div className="space-y-3">
-              {faqs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="bg-[var(--bg-light)] border border-primary/20 rounded-lg overflow-hidden"
-                >
-                  <button
-                    onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                    className="w-full text-left p-4 flex items-start justify-between gap-4 hover:bg-primary/5 transition-colors"
-                  >
-                    <span className="text-base font-semibold text-white pr-4">
-                      {faq.question}
-                    </span>
-                    <svg
-                      className={`w-5 h-5 text-primary flex-shrink-0 transition-transform duration-300 ${
-                        openIndex === index ? 'rotate-180' : ''
-                      }`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  <div
-                    className={`overflow-hidden transition-all duration-300 ${
-                      openIndex === index ? 'max-h-96' : 'max-h-0'
-                    }`}
-                  >
-                    <div className="px-4 pb-4 text-text-muted leading-relaxed text-sm">
-                      {faq.answer}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tighter leading-tight">
+              Questions?
+              <br />
+              <span className="text-accent">Answers.</span>
+            </h2>
           </div>
 
-          {/* Right Side - Contact Us */}
-          <div
-            className={`transition-all duration-700 ${
-              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
-            }`}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-              Contact Us
-            </h2>
-            <p className="text-text-muted mb-6">
-              Have questions? Get in touch with our team
-            </p>
-
-            <div className="bg-[var(--bg-light)] border border-secondary/20 rounded-2xl p-8 pb-[4.5rem] relative overflow-hidden"
-              style={{
-                backgroundImage: `radial-gradient(circle at 1px 1px, rgba(239, 68, 68, 0.15) 1px, transparent 0)`,
-                backgroundSize: '24px 24px'
-              }}
-            >
-              {/* Email */}
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wider">Email</h3>
-                    <a
-                      href="mailto:yahya@getpaidfast.ai"
-                      className="text-white text-lg hover:text-secondary transition-colors"
-                    >
-                      yahya@getpaidfast.ai
-                    </a>
-                  </div>
+          {/* Right — accordion */}
+          <div className="divide-y divide-border">
+            {faqs.map((faq, i) => {
+              const isOpen = openIndex === i;
+              return (
+                <div key={i} className="py-6">
+                  <button
+                    onClick={() => setOpenIndex(isOpen ? null : i)}
+                    className="w-full flex items-start justify-between gap-4 text-left group"
+                  >
+                    <span className="text-base font-semibold tracking-tight group-hover:text-accent transition-colors duration-150">
+                      {faq.question}
+                    </span>
+                    {isOpen ? (
+                      <Minus size={18} strokeWidth={1.5} className="text-accent shrink-0 mt-1" />
+                    ) : (
+                      <Plus size={18} strokeWidth={1.5} className="text-muted-foreground shrink-0 mt-1" />
+                    )}
+                  </button>
+                  {isOpen && (
+                    <p className="mt-4 text-sm text-muted-foreground leading-relaxed max-w-lg">
+                      {faq.answer}
+                    </p>
+                  )}
                 </div>
-              </div>
-
-              {/* Phone */}
-              <div className="mb-8">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wider">Phone</h3>
-                    <a
-                      href="tel:+64211065683"
-                      className="text-white text-lg hover:text-secondary transition-colors"
-                    >
-                      +64 21 106 5683
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              {/* Hours */}
-              <div className="mb-10">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-text-muted uppercase tracking-wider">Hours</h3>
-                    <p className="text-white text-lg">9am - 9pm NZST</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* CTA */}
-              <div className="pt-6 border-t border-secondary/20">
-                <p className="text-text-muted mb-4">
-                  Ready to automate your collections?
-                </p>
-                <a
-                  href="https://dashboard.getpaidfast.ai/register"
-                  className="block w-full text-center px-6 py-3.5 bg-secondary text-white rounded-full font-semibold hover:opacity-90 transition-opacity"
-                >
-                  Get Started Free
-                </a>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
